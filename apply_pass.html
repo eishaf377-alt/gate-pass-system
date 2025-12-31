@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h2 style="margin-bottom: 2rem;">Apply for Gate Pass</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="reason">Reason for Leaving</label>
+            <textarea id="reason" name="reason" rows="3" required></textarea>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+                <label for="out_time">Expected Out Time</label>
+                <input type="datetime-local" id="out_time" name="out_time" required>
+            </div>
+            <div class="form-group">
+                <label for="in_time">Expected In Time</label>
+                <input type="datetime-local" id="in_time" name="in_time" required>
+            </div>
+        </div>
+        <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-primary">Submit Request</button>
+            <a href="{{ url_for('dashboard') }}" class="btn" style="background-color: var(--bg-color);">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
