@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h1>Dashboard</h1>
+    {% if not is_admin %}
+    <a href="{{ url_for('apply_pass') }}" class="btn btn-primary">Apply for Pass</a>
+    {% endif %}
+</div>
+
+{% if is_admin %}
+<div class="card">
+    <h2>Pending Requests</h2>
+    {% if passes %}
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Reason</th>
+                <th>Out Time</th>
+                <th>In Time</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pass in passes %}
+            <tr>
+                <td>{{ pass.user.username }}</td>
+                <td>{{ pass.reason }}</td>
+                <td>{{ pass.out_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ pass.in_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <a href="{{ url_for('update_pass', pass_id=pass.id, action='approve') }}" class="btn btn-success"
+                        style="padding: 0.25rem 0.5rem; font-size: 0.875rem;">Approve</a>
+                    <a href="{{ url_for('update_pass', pass_id=pass.id, action='reject') }}" class="btn btn-danger"
+                        style="margin-left: 0.5rem; padding: 0.25rem 0.5rem; font-size: 0.875rem;">Reject</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: var(--text-muted);">No pending requests.</p>
+    {% endif %}
+</div>
+{% else %}
+<div class="card">
+    <h2>My Passes</h2>
+    {% if passes %}
+    <table>
+        <thead>
+            <tr>
+                <th>Reason</th>
+                <th>Out Time</th>
+                <th>In Time</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pass in passes %}
+            <tr>
+                <td>{{ pass.reason }}</td>
+                <td>{{ pass.out_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ pass.in_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <span class="status-badge status-{{ pass.status.lower() }}">
+                        {{ pass.status }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: var(--text-muted);">You haven't applied for any passes yet.</p>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
